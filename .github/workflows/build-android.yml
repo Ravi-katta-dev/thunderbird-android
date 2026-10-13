@@ -72,6 +72,14 @@ jobs:
       - name: Build K9 application
         run: ./gradlew :app-k9mail:assemble -Pci=true
 
+      - name: Upload K-9 APKs
+        uses: actions/upload-artifact@v4
+        with:
+          name: k9mail-apks
+          path: app-k9mail/build/outputs/apk/**/*.apk
+          if-no-files-found: error
+          retention-days: 7
+
   check-badging-k9:
     name: Check - K9 badging
     runs-on: ubuntu-latest
@@ -109,6 +117,14 @@ jobs:
 
       - name: Build Thunderbird application
         run: ./gradlew :app-thunderbird:assemble -Pci=true
+
+      - name: Upload Thunderbird APKs
+        uses: actions/upload-artifact@v4
+        with:
+          name: thunderbird-apks
+          path: app-thunderbird/build/outputs/apk/**/*.apk
+          if-no-files-found: error
+          retention-days: 7
 
   check-badging-thunderbird:
     name: Check - Thunderbird badging
