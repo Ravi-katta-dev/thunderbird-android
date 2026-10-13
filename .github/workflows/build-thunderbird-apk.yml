@@ -1,0 +1,36 @@
+name: Build Thunderbird APK
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: thunderbird-apk-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-thunderbird-apk:
+    name: Build and upload Thunderbird APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 1
+
+      - name: Setup Gradle environment
+        uses: ./.github/actions/setup-gradle
+
+      - name: Build Thunderbird application
+        run: ./gradlew :app-thunderbird:assemble -Pci=true
+
+      - name: Upload Thunderbird APKs
+        uses: actions/upload-artifact@v4
+        with:
+          name: thunderbird-apks
+          path: app-thunderbird/build/outputs/apk/**/*.apk
+          if-no-files-found: error
+          retention-days: 7
