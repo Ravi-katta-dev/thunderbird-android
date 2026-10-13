@@ -2,6 +2,18 @@ name: Build Thunderbird APK
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/build-thunderbird-apk.yml'
+      - 'app-thunderbird/**'
+      - 'app-common/**'
+      - 'feature/widget/message-list/**'
+      - 'core/**'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+      - 'gradle/**'
 
 permissions:
   contents: read
