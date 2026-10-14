@@ -1,4 +1,4 @@
-name: Build Thunderbird APK
+name: Build Thunderbird Test APK
 
 on:
   workflow_dispatch:
@@ -19,12 +19,12 @@ permissions:
   contents: read
 
 concurrency:
-  group: thunderbird-apk-${{ github.ref }}
+  group: thunderbird-test-apk-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build-thunderbird-apk:
-    name: Build and upload Thunderbird APK
+  build-test-apk:
+    name: Build and upload Thunderbird test APK
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
@@ -36,13 +36,13 @@ jobs:
       - name: Setup Gradle environment
         uses: ./.github/actions/setup-gradle
 
-      - name: Build Thunderbird application
-        run: ./gradlew :app-thunderbird:assemble -Pci=true
+      - name: Build installable test variant
+        run: ./gradlew :app-thunderbird:assembleFossDebug -Pci=true
 
-      - name: Upload Thunderbird APKs
+      - name: Upload Thunderbird test APK
         uses: actions/upload-artifact@v4
         with:
-          name: thunderbird-apks
-          path: app-thunderbird/build/outputs/apk/**/*.apk
+          name: thunderbird-test-apk
+          path: app-thunderbird/build/outputs/apk/foss/debug/*.apk
           if-no-files-found: error
           retention-days: 7
